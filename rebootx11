@@ -1,0 +1,13 @@
+#!/bin/bash
+
+gdm_pid=$(pgrep gdm)
+
+if [ -n "gdm_pid" ]; then
+   display=$(ls /tmp/.X11-unix/* | sed 's#/tmp/.X11-unix/X##' | head -n 1)
+   user=$(ps aux | grep gnome-session | awk '{print $1}' | egrep [0,9] | head -n 1)
+   uid=$(id -u $user)
+   echo "Display environment: $display $user $uid"
+   sudo -u $user DISPLAY=$display DBUS_SESSION_BUS_ADDRESS=unix:path=/run/user/$uid/bus notify-send "WARNING This machine will reboot in 10 minutes, save your work and logoff"
+else
+   echo "Warning: Could not find xinit process!"
+fi
