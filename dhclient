@@ -1,0 +1,5 @@
+#/bin/bash
+
+interface=$(ip addr | awk '/state UP/ {print $2}' | sed 's/.$//')
+echo "$interface"
+/usr/sbin/dhclient -1 $interface
